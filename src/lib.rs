@@ -74,8 +74,8 @@ pub fn parse<'a>(
     Ok(result)
 }
 
-fn parse_number(line: &str) -> Result<f64, errors::QifParsingError> {
-    match line[1..].to_string().trim().replace(',', "").parse() {
+fn parse_number(line: &str) -> Result<i64, errors::QifParsingError> {
+    match line[1..].to_string().trim().replace(',', "").replace('.', "").parse() {
         Err(_err) => {
             let msg = format!(
                 "Could not parse the following as a number: '{}'",
@@ -162,7 +162,7 @@ fn parse_line<'a>(
             let split = QifSplit {
                 category: &line[1..],
                 memo: "",
-                amount: 0.0,
+                amount: 0,
                 number_of_the_check: "",
             };
             item.splits.push(split);

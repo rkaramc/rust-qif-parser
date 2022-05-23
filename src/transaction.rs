@@ -8,7 +8,7 @@ use std::fmt;
 pub struct QifTransaction<'a> {
     /// Parsed date, with format YYYY-MM-DD
     pub date: String,
-    pub amount: f64,
+    pub amount: i64,
     pub memo: &'a str,
     pub payee: &'a str,
     pub category: &'a str,

@@ -6,7 +6,7 @@ use std::fmt;
 pub struct QifSplit<'a> {
     pub category: &'a str,
     pub memo: &'a str,
-    pub amount: f64,
+    pub amount: i64,
     pub number_of_the_check: &'a str,
 }
 

@@ -5,15 +5,15 @@ use std::fmt;
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct QifInvestment<'a> {
     pub date: String,
-    pub amount: f64,
+    pub amount: i64,
     pub memo: &'a str,
     pub cleared_status: &'a str,
     pub action: &'a str,
     pub security_name: &'a str,
-    pub price: f64,
-    pub quantity: f64,
-    pub commission_cost: f64,
-    pub amount_transferred: f64,
+    pub price: i64,
+    pub quantity: i64,
+    pub commission_cost: i64,
+    pub amount_transferred: i64,
 }
 
 impl<'a> fmt::Display for QifInvestment<'a> {
