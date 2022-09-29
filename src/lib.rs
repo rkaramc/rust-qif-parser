@@ -75,7 +75,13 @@ pub fn parse<'a>(
 }
 
 fn parse_number(line: &str) -> Result<i64, errors::QifParsingError> {
-    match line[1..].to_string().trim().replace(',', "").replace('.', "").parse() {
+    match line[1..]
+        .to_string()
+        .trim()
+        .replace(',', "")
+        .replace('.', "")
+        .parse()
+    {
         Err(_err) => {
             let msg = format!(
                 "Could not parse the following as a number: '{}'",
