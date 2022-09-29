@@ -205,15 +205,20 @@ mod tests {
     #[test]
     fn parse_number_test() {
         let parsed = parse_number("X123.45").unwrap();
-        assert_eq!(parsed, 123.45);
+        assert_eq!(parsed, 12345);
 
         let parsed = parse_number("X-123.45").unwrap();
-        assert_eq!(parsed, -123.45);
+        assert_eq!(parsed, -12345);
 
         let parsed = parse_number("X+123.45").unwrap();
-        assert_eq!(parsed, 123.45);
+        assert_eq!(parsed, 12345);
 
+        // will fail -- parse_number() does not extend number to 2 decimal places
+        let parsed = parse_number("X123.0").unwrap();
+        assert_eq!(parsed, 12300);
+
+        // will fail -- parse_number() does not extend number to 2 decimal places
         let parsed = parse_number("X123").unwrap();
-        assert_eq!(parsed, 123.0);
+        assert_eq!(parsed, 12300);
     }
 }
