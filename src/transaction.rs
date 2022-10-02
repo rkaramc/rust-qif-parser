@@ -11,13 +11,27 @@ use std::fmt;
 pub struct QifTransaction<'a> {
     /// Parsed date, with format YYYY-MM-DD
     pub date: String,
+
     pub amount: i64,
+
+    #[builder(default)]
     pub memo: &'a str,
+
     pub payee: &'a str,
+
+    #[builder(default)]
     pub category: &'a str,
+
+    #[builder(default)]
     pub cleared_status: &'a str,
+
+    #[builder(default)]
     pub address: Vec<&'a str>,
+
+    #[builder(default)]
     pub splits: Vec<QifSplit<'a>>,
+
+    #[builder(default)]
     pub number_of_the_check: &'a str,
 }
 
@@ -33,9 +47,28 @@ impl<'a> fmt::Display for QifTransaction<'a> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{date::parse_date, errors::QifParsingError, parse_number};
+    use crate::{
+        date::{self, parse_date},
+        errors::QifParsingError,
+        parse_number,
+    };
 
     use super::*;
+
+    const date_format: &str = "%m/%d/%y";
+    const qif_content: &str = "!Type:Bank
+D03/03/10
+T-379.00
+PCITY OF SPRINGFIELD
+^
+D03/04/10
+T-20.28
+PYOUR LOCAL SUPERMARKET
+^
+D03/03/10
+T-421.35
+PSPRINGFIELD WATER UTILITY
+^";
 
     #[test]
     fn test_builder() -> Result<(), QifParsingError> {
@@ -64,6 +97,34 @@ mod tests {
         assert_eq!(tb.amount, -37900);
         assert_eq!(tb.payee, "CITY OF SPRINGFIELD");
         Ok(())
+    }
+
+    #[test]
+    fn test_parsing_builder() {
+        let results = {
+            let mut results: Vec<QifTransaction> = Vec::new();
+            let mut item = QifTransactionBuilder::default();
+            let lines: Vec<&str> = qif_content.lines().collect();
+
+            for line in lines {
+                if line.starts_with("^") {
+                    results.push(item.build().unwrap());
+                    item = QifTransactionBuilder::default();
+                }
+                // let item: &mut QifTransaction = &mut current_item;
+                match &line[..1] {
+                    "T" => item.amount(parse_number(line).unwrap()),
+                    "P" => item.payee(&line[1..]),
+                    "D" => item.date(date::parse_date(&line[1..], date_format).unwrap()),
+                    _ => &mut item,
+                };
+
+                ()
+            }
+            results
+        };
+        assert_eq!(results.len(), 3);
+        dbg!(results);
     }
 }
 
