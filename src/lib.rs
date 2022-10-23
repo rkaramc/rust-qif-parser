@@ -75,7 +75,7 @@ pub fn parse<'a>(
 }
 
 fn parse_number(line: &str) -> Result<i64, errors::QifParsingError> {
-    match line[1..].to_string().trim().replace(',', "").replace('.', "").parse() {
+    match line[1..].to_string().trim().replace(',', "").parse::<f32>() {
         Err(_err) => {
             let msg = format!(
                 "Could not parse the following as a number: '{}'",
@@ -83,7 +83,7 @@ fn parse_number(line: &str) -> Result<i64, errors::QifParsingError> {
             );
             Err(errors::QifParsingError::new(&msg))
         }
-        Ok(amount) => Ok(amount),
+        Ok(amount) => Ok((amount * 100.0).round() as i64),
     }
 }
 
@@ -205,20 +205,18 @@ mod tests {
     #[test]
     fn parse_number_test() {
         let parsed = parse_number("X123.45").unwrap();
-        assert_eq!(parsed, 12345);
+        assert_eq!(parsed, 123_45);
 
         let parsed = parse_number("X-123.45").unwrap();
-        assert_eq!(parsed, -12345);
+        assert_eq!(parsed, -123_45);
 
         let parsed = parse_number("X+123.45").unwrap();
-        assert_eq!(parsed, 12345);
+        assert_eq!(parsed, 123_45);
 
-        // will fail -- parse_number() does not extend number to 2 decimal places
         let parsed = parse_number("X123.0").unwrap();
-        assert_eq!(parsed, 12300);
+        assert_eq!(parsed, 123_00);
 
-        // will fail -- parse_number() does not extend number to 2 decimal places
         let parsed = parse_number("X123").unwrap();
-        assert_eq!(parsed, 12300);
+        assert_eq!(parsed, 123_00);
     }
 }

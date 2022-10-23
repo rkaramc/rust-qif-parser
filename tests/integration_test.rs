@@ -15,7 +15,7 @@ fn test_wikipedia_simple_example() {
     // First items
     let first = &result.transactions[0];
     assert_eq!(first.date, "2010-03-03");
-    assert_eq!(first.amount, -37900);
+    assert_eq!(first.amount, -379_00);
     assert_eq!(first.category, "");
     assert_eq!(first.payee, "CITY OF SPRINGFIELD");
     assert_eq!(first.cleared_status, "");
@@ -23,7 +23,7 @@ fn test_wikipedia_simple_example() {
     // Second items
     let second = &result.transactions[1];
     assert_eq!(second.date, "2010-03-04");
-    assert_eq!(second.amount, -2028);
+    assert_eq!(second.amount, -20_28);
     assert_eq!(second.category, "");
     assert_eq!(second.payee, "YOUR LOCAL SUPERMARKET");
     assert_eq!(second.cleared_status, "");
@@ -47,9 +47,9 @@ fn test_wikipedia_investment_example() {
     assert_eq!(first.date, "2007-12-21");
     assert_eq!(first.action, "Buy");
     assert_eq!(first.security_name, "IBM");
-    assert_eq!(first.amount, 1101000);
-    assert_eq!(first.price, 11010);
-    // assert_eq!(first.quantity, 10000); // will fail -- parse_number() does not extend number to 2 decimal places
+    assert_eq!(first.amount, 11_010_00);
+    assert_eq!(first.price, 110_10);
+    assert_eq!(first.quantity, 100_00);
     assert_eq!(
         first.memo,
         "Purchase of 100 shares of IBM stock on 21 December 2007 at $110.10 per share"
@@ -80,10 +80,10 @@ fn test_wikipedia_example() {
     assert_eq!(second.splits.len(), 2);
     assert_eq!(second.splits[0].category, "Bills:Cell Phone");
     assert_eq!(second.splits[0].memo, "sign up credit");
-    assert_eq!(second.splits[0].amount, -1500);
+    assert_eq!(second.splits[0].amount, -15_00);
     assert_eq!(second.splits[1].category, "Bills:Cell Phone");
     assert_eq!(second.splits[1].memo, "new account");
-    assert_eq!(second.splits[1].amount, 8250);
+    assert_eq!(second.splits[1].amount, 82_50);
 
     // Third item (memo)
     let third = &result.transactions[2];
@@ -106,7 +106,7 @@ fn test_monzo_example() {
     // First items
     let first = &result.transactions[0];
     assert_eq!(first.date, "2018-08-27");
-    assert_eq!(first.amount, 100000);
+    assert_eq!(first.amount, 1000_00);
     assert_eq!(first.category, "");
     assert_eq!(first.payee, "Jane Doe");
     assert_eq!(first.cleared_status, "");
@@ -114,7 +114,7 @@ fn test_monzo_example() {
     // Third items
     let third = &result.transactions[2];
     assert_eq!(third.date, "2018-08-28");
-    // assert_eq!(third.amount, -150000); // will fail -- parse_number() does not extend number to 2 decimal places
+    assert_eq!(third.amount, -15_00);
     assert_eq!(third.category, "Transport");
     assert_eq!(third.payee, "Infinity Motor Cycles");
     assert_eq!(third.address[0], "30-32 FairyLand High Street");
@@ -135,7 +135,7 @@ fn test_cic_example() {
     // First items
     let first = &result.transactions[0];
     assert_eq!(first.date, "2020-05-19");
-    assert_eq!(first.amount, 50000);
+    assert_eq!(first.amount, 500_00);
     assert_eq!(first.category, "");
     assert_eq!(first.payee, "REM CHQ REF1234");
     assert_eq!(first.cleared_status, "");
@@ -143,7 +143,7 @@ fn test_cic_example() {
     // Third items
     let third = &result.transactions[2];
     assert_eq!(third.date, "2020-06-02");
-    assert_eq!(third.amount, -959);
+    assert_eq!(third.amount, -9_59);
     assert_eq!(third.category, "");
     assert_eq!(third.payee, "KIMSUFI CARTE 1234 PAIEMENT CB 0106 ROUBAIX");
     assert_eq!(third.address.len(), 0);
@@ -164,7 +164,7 @@ fn test_nasty_example() {
     // First items
     let first = &result.transactions[0];
     assert_eq!(first.date, "2018-08-27");
-    assert_eq!(first.amount, 10_00000);
+    assert_eq!(first.amount, 10_000_00);
     assert_eq!(first.category, "");
     assert_eq!(first.payee, "Jane Doe");
     assert_eq!(first.cleared_status, "");
@@ -172,7 +172,7 @@ fn test_nasty_example() {
     // Second items
     let second = &result.transactions[1];
     assert_eq!(second.date, "2018-08-27");
-    assert_eq!(second.amount, -10_000_00000);
+    assert_eq!(second.amount, -10_000_000_00);
     assert_eq!(second.category, "Shopping");
     assert_eq!(second.payee, "Huge Amount 😅 with UTF8");
     assert_eq!(second.address.len(), 3);
@@ -182,7 +182,7 @@ fn test_nasty_example() {
 
     // Item with + sign on amount
     let third = &result.transactions[2];
-    // assert_eq!(third.amount, 12300); // will fail -- parse_number() does not extend number to 2 decimal places
+    assert_eq!(third.amount, 123_00);
 
     // Item with missing leading 0 on date
     let fourth = &result.transactions[3];
